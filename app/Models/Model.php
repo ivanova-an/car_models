@@ -10,4 +10,9 @@ class Model extends Eloquent
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function generations()
+    {
+        return $this->hasMany(Generation::class);
+    }
 }

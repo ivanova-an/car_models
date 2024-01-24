@@ -23,13 +23,13 @@ class ParseGeneration extends Command
 
             $generationCrawler = $client->request('GET', $baseUrl);
 
-            $generationCrawler->filter('.css-pyemnz')->each(function ($node) use ($modelName, $baseUrl) {
+            $generationCrawler->filter('.css-pyemnz')->each(function ($node) use ($model, $baseUrl) {
                 $market = $node->filter('.css-112idg0')->text();
                 $this->info("Market: $market");
 
                 $items = $node->filter('.css-btm8d5');
 
-                $items->each(function ($item) use ($modelName, $baseUrl, $market) {
+                $items->each(function ($item) use ($model, $baseUrl, $market) {
                     $nameNode = $item->filterXPath('//span[@class="css-1089mxj e1ei9t6a2"]/text()');
                     $name = $nameNode->count() ? $nameNode->text() : '';
 
@@ -50,10 +50,7 @@ class ParseGeneration extends Command
                         'path_to_page' => $pageUrl,
                     ];
 
-                    $audiModel = Model::where('name', $modelName)->first();
-
-                    $generationData['model_id'] = $audiModel->id;
-                    Generation::create($generationData);
+                    $model->generations()->create($generationData);
 
                     $this->info("Generation Data for $finalName saved successfully!");
                 });
