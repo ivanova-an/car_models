@@ -30,13 +30,10 @@ class ParseModelsCommand extends Command
         $client = new Client();
         $crawler = $client->request('GET', 'https://www.drom.ru/catalog/audi/');
 
-        $models = $crawler->filterXPath('//a[@class="e64vuai0 css-1i48p5q e104a11t0"]/text()')->each(function ($node) {
-            return $node->text();
+        $crawler  -> filterXPath('//a[@class="e64vuai0 css-1i48p5q e104a11t0"]/text()')->each(function ($node) {
+            Model::create(['name' => $node->text()]);
         });
 
-        foreach ($models as $model) {
-            Model::create(['name' => $model]);
-        }
 
         $this->info('Models parsed and stored successfully.');
     }
